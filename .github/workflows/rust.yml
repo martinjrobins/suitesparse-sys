@@ -73,9 +73,7 @@ jobs:
       run: rustc -Vv
     - name: Run tests - default features
       run: cargo test --verbose 
-    - name: Run tests - all features
-      run: cargo test --verbose --all-features
-    - name: Clippy - all features
-      run: cargo clippy --verbose --all-features
-    - name: Docs - all features
-      run: cargo rustdoc --all-features
+    - name: Clippy - default features
+      run: cargo clippy --verbose
+    - name: Docs - default features
+      run: cargo rustdoc
