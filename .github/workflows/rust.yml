@@ -55,15 +55,9 @@ jobs:
       uses: nuget/setup-nuget@v2
       with:
         nuget-version: '5.x'
-    - name: Install Homebrew (macos)
-      if: matrix.os == 'macos-latest'
-      uses: Homebrew/actions/setup-homebrew@master
     - name: Install BLAS (ubuntu)
       if: matrix.os == 'ubuntu-latest'
       run: sudo apt-get install libblas-dev liblapack-dev libopenblas-dev
-    - name: Install BLAS (macos)
-      if: matrix.os == 'macos-latest'
-      run: brew install openblas
     - name: Install BLAS (windows)
       if: matrix.os == 'windows-latest'
       run: nuget install openblas
