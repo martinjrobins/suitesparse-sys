@@ -60,7 +60,7 @@ jobs:
       uses: Homebrew/actions/setup-homebrew@master
     - name: Install BLAS (ubuntu)
       if: matrix.os == 'ubuntu-latest'
-      run: sudo apt-get install libblas-dev liblapack-dev
+      run: sudo apt-get install libblas-dev liblapack-dev libopenblas-dev
     - name: Install BLAS (macos)
       if: matrix.os == 'macos-latest'
       run: brew install openblas
