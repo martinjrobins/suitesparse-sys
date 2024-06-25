@@ -10,6 +10,7 @@ This crate provides bindings to the SuiteSparse library. The possible features a
 
 - `build_vendor`: Build the SuiteSparse library from source (currently version v7.7.0)
 - `build_static_libraries`: Build the SuiteSparse library as static libraries
+- `openmp`: Enable OpenMP support in the SuiteSparse library
 
 Each library in the SuiteSparse library is a separate feature. The features are:
 
