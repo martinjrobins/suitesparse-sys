@@ -2,6 +2,10 @@
 name = "suitesparse-sys"
 version = "0.1.0"
 edition = "2021"
+description = "sys crate for suitesparse library"
+license = "MIT"
+authors = ["Martin Robinson <martinjrobins@gmail.com>"]
+repository = "https://github.com/martinjrobins/suitesparse-sys"
 
 [dependencies]
 
