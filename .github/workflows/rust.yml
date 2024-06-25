@@ -50,6 +50,20 @@ jobs:
           ${{ env.CARGO_HOME }}
           target
         key: unit-test-${{ runner.os }}-${{ matrix.toolchain}}
+    - name: Install NuGet (windows)
+      if: matrix.os == 'windows-latest'
+      uses: nuget/setup-nuget@v2
+      with:
+        nuget-version: '5.x'
+    - name: Install BLAS (ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: sudo apt-get install libblas-dev liblapack-dev
+    - name: Install BLAS (mac)
+      if: matrix.os == 'macos-latest'
+      run: brew install openblas
+    - name: Install BLAS (windows)
+      if: matrix.os == 'windows-latest'
+      run: nuget install openblas
     - name: Set up Rust
       run: rustup default ${{ matrix.toolchain }} && rustup update ${{ matrix.toolchain }} --no-self-update && rustup component add clippy
     - name: Rust version
