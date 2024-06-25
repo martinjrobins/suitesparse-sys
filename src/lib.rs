@@ -69,7 +69,6 @@ impl Default for klu_l_common {
             mempeak: Default::default(),
         }
     }
-
 }
 
 #[cfg(test)]
