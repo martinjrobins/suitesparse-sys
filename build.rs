@@ -182,11 +182,6 @@ fn main() -> Result<(), String> {
         "cargo:rustc-link-search=native={}",
         suitesparse.lib.as_ref().unwrap()
     );
-    println!(
-        "cargo:suitesparse-library={}",
-        suitesparse.lib.as_ref().unwrap()
-    );
-    println!("cargo:suitesparse-include={}", suitesparse.inc.unwrap());
 
     let mut lib_names = vec!["suitesparseconfig"];
     for &lib in ENABLED_LIBRARIES {
