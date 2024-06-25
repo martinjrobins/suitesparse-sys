@@ -60,7 +60,9 @@ jobs:
       run: sudo apt-get install libblas-dev liblapack-dev libopenblas-dev
     - name: Install BLAS (windows)
       if: matrix.os == 'windows-latest'
-      run: nuget install openblas
+      run: |
+        nuget install openblas -ExcludeVersion 
+        mv OpenBLAS/lib .
     - name: Set up Rust
       run: rustup default ${{ matrix.toolchain }} && rustup update ${{ matrix.toolchain }} --no-self-update && rustup component add clippy
     - name: Rust version
