@@ -70,7 +70,6 @@ impl IgnoreMacros {
     }
 }
 
-
 #[derive(Debug)]
 struct Library {
     inc: Option<String>,
@@ -80,7 +79,11 @@ struct Library {
 
 impl Library {
     fn new() -> Self {
-        Self { inc: env::var("SUITESPARSE_INCLUDE_DIR").ok(), lib: env::var("SUITESPARSE_LIBRARY_DIR").ok(), is_static: true }
+        Self {
+            inc: env::var("SUITESPARSE_INCLUDE_DIR").ok(),
+            lib: env::var("SUITESPARSE_LIBRARY_DIR").ok(),
+            is_static: true,
+        }
     }
     fn is_some(&self) -> bool {
         self.inc.is_some() && self.lib.is_some()
@@ -109,13 +112,10 @@ fn build_vendor() -> Result<Library, String> {
         static_libraries = "ON";
     }
 
-    let mut build_libraries = vec![
-        "suitesparse_config",
-    ];
+    let mut build_libraries = vec!["suitesparse_config"];
     for &lib in ENABLED_LIBRARIES {
         build_libraries.push(lib);
     }
-
 
     let mut config = cmake::Config::new("vendor");
     config
@@ -131,7 +131,11 @@ fn build_vendor() -> Result<Library, String> {
     let dst_disp = dst.display();
     let lib_loc = Some(format!("{}/lib", dst_disp));
     let inc_dir = Some(format!("{}/include", dst_disp));
-    Ok(Library { inc: inc_dir, lib: lib_loc, is_static: static_libraries == "ON" })
+    Ok(Library {
+        inc: inc_dir,
+        lib: lib_loc,
+        is_static: static_libraries == "ON",
+    })
 }
 
 fn generate_bindings(suitesparse: &Library) -> Result<(), String> {
@@ -145,14 +149,15 @@ fn generate_bindings(suitesparse: &Library) -> Result<(), String> {
         .clang_arg(format!("-I{}", suitesparse.inc.as_ref().unwrap()))
         .clang_args(lib_args)
         .parse_callbacks(Box::new(IgnoreMacros::new()))
-        .generate().map_err(|e| e.to_string())?;
+        .generate()
+        .map_err(|e| e.to_string())?;
 
-        let bindings_rs = PathBuf::from(env::var("OUT_DIR").unwrap())
-            .join("bindings.rs");
+    let bindings_rs = PathBuf::from(env::var("OUT_DIR").unwrap()).join("bindings.rs");
 
-
-        bindings.write_to_file(bindings_rs).expect("Couldn't write file bindings.rs!");
-        Ok(())
+    bindings
+        .write_to_file(bindings_rs)
+        .expect("Couldn't write file bindings.rs!");
+    Ok(())
 }
 
 fn main() -> Result<(), String> {
@@ -173,13 +178,17 @@ fn main() -> Result<(), String> {
     generate_bindings(&suitesparse)?;
 
     // let Cargo know about the library files
-    println!("cargo:rustc-link-search=native={}", suitesparse.lib.as_ref().unwrap());
-    println!("cargo:suitesparse-library={}", suitesparse.lib.as_ref().unwrap());
+    println!(
+        "cargo:rustc-link-search=native={}",
+        suitesparse.lib.as_ref().unwrap()
+    );
+    println!(
+        "cargo:suitesparse-library={}",
+        suitesparse.lib.as_ref().unwrap()
+    );
     println!("cargo:suitesparse-include={}", suitesparse.inc.unwrap());
 
-    let mut lib_names = vec![
-        "suitesparseconfig",
-    ];
+    let mut lib_names = vec!["suitesparseconfig"];
     for &lib in ENABLED_LIBRARIES {
         lib_names.push(lib);
     }
@@ -189,12 +198,9 @@ fn main() -> Result<(), String> {
     } else {
         "dylib"
     };
-    
+
     for lib_name in &lib_names {
-        println!(
-            "cargo:rustc-link-lib={}={}",
-            library_type, lib_name
-        );
+        println!("cargo:rustc-link-lib={}={}", library_type, lib_name);
     }
 
     println!("cargo:rerun-if-changed=build.rs");

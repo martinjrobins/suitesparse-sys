@@ -9,7 +9,6 @@
 use std::default::Default;
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
-
 impl Default for klu_common {
     fn default() -> Self {
         klu_common_struct {
@@ -41,7 +40,6 @@ impl Default for klu_common {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -57,7 +55,15 @@ mod tests {
         let mut Common = klu_common::default();
         unsafe { klu_defaults(&mut Common) };
         let mut Symbolic = unsafe { klu_analyze(n, Ap.as_mut_ptr(), Ai.as_mut_ptr(), &mut Common) };
-        let mut Numeric = unsafe { klu_factor(Ap.as_mut_ptr(), Ai.as_mut_ptr(), Ax.as_mut_ptr(), Symbolic, &mut Common) };
+        let mut Numeric = unsafe {
+            klu_factor(
+                Ap.as_mut_ptr(),
+                Ai.as_mut_ptr(),
+                Ax.as_mut_ptr(),
+                Symbolic,
+                &mut Common,
+            )
+        };
         unsafe { klu_solve(Symbolic, Numeric, n, 1, b.as_mut_ptr(), &mut Common) };
         unsafe { klu_free_symbolic(&mut Symbolic, &mut Common) };
         unsafe { klu_free_numeric(&mut Numeric, &mut Common) };
