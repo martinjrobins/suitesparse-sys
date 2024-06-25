@@ -40,6 +40,38 @@ impl Default for klu_common {
     }
 }
 
+impl Default for klu_l_common {
+    fn default() -> Self {
+        klu_l_common_struct {
+            tol: Default::default(),
+            memgrow: Default::default(),
+            initmem_amd: Default::default(),
+            initmem: Default::default(),
+            maxwork: Default::default(),
+            btf: Default::default(),
+            ordering: Default::default(),
+            scale: Default::default(),
+            user_order: Default::default(),
+            user_data: std::ptr::null_mut(),
+            halt_if_singular: Default::default(),
+            status: Default::default(),
+            nrealloc: Default::default(),
+            structural_rank: Default::default(),
+            numerical_rank: Default::default(),
+            singular_col: Default::default(),
+            noffdiag: Default::default(),
+            flops: Default::default(),
+            rcond: Default::default(),
+            condest: Default::default(),
+            rgrowth: Default::default(),
+            work: Default::default(),
+            memusage: Default::default(),
+            mempeak: Default::default(),
+        }
+    }
+
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
