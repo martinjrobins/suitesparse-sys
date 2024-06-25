@@ -11,7 +11,7 @@ cmake = "0.1.50"
 pkg-config = "0.3.30"
 
 [features]
-default = ["klu", "static_libraries", "build_vendor"]
+default = ["klu", "amd", "colamd", "btf", "static_libraries", "build_vendor"]
 static_libraries = []
 build_vendor = []
 mongoose = []

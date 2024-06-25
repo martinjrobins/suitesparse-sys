@@ -1,4 +1,4 @@
-use std::{env, path::PathBuf};
+use std::{collections::HashSet, env, path::PathBuf};
 
 macro_rules! add_if_feature {
     ($s:tt) => {
@@ -26,6 +26,49 @@ const ENABLED_LIBRARIES: &[&str] = &[
     add_if_feature!("graphblas"),
     add_if_feature!("lagraph"),
 ];
+
+// Ignore some macros (based on https://github.com/rust-lang/rust-bindgen/issues/687#issuecomment-1312298570)
+#[derive(Debug)]
+struct IgnoreMacros(HashSet<&'static str>);
+
+impl bindgen::callbacks::ParseCallbacks for IgnoreMacros {
+    fn will_parse_macro(&self, name: &str) -> bindgen::callbacks::MacroParsingBehavior {
+        use bindgen::callbacks::MacroParsingBehavior;
+        if self.0.contains(name) {
+            MacroParsingBehavior::Ignore
+        } else {
+            MacroParsingBehavior::Default
+        }
+    }
+}
+
+impl IgnoreMacros {
+    const IGNORE_CONSTANTS: [&'static str; 19] = [
+        "FE_DIVBYZERO",
+        "FE_DOWNWARD",
+        "FE_INEXACT",
+        "FE_INVALID",
+        "FE_OVERFLOW",
+        "FE_TONEAREST",
+        "FE_TOWARDZERO",
+        "FE_UNDERFLOW",
+        "FE_UPWARD",
+        "FP_INFINITE",
+        "FP_INT_DOWNWARD",
+        "FP_INT_TONEAREST",
+        "FP_INT_TONEARESTFROMZERO",
+        "FP_INT_TOWARDZERO",
+        "FP_INT_UPWARD",
+        "FP_NAN",
+        "FP_NORMAL",
+        "FP_SUBNORMAL",
+        "FP_ZERO",
+    ];
+
+    fn new() -> Self {
+        Self(Self::IGNORE_CONSTANTS.iter().copied().collect())
+    }
+}
 
 
 #[derive(Debug)]
@@ -101,6 +144,7 @@ fn generate_bindings(suitesparse: &Library) -> Result<(), String> {
     let bindings = builder
         .clang_arg(format!("-I{}", suitesparse.inc.as_ref().unwrap()))
         .clang_args(lib_args)
+        .parse_callbacks(Box::new(IgnoreMacros::new()))
         .generate().map_err(|e| e.to_string())?;
 
         let bindings_rs = PathBuf::from(env::var("OUT_DIR").unwrap())
@@ -152,5 +196,9 @@ fn main() -> Result<(), String> {
             library_type, lib_name
         );
     }
+
+    println!("cargo:rerun-if-changed=build.rs");
+    println!("cargo:rerun-if-changed=wrapper.h");
+
     Ok(())
 }
