@@ -18,6 +18,7 @@ pkg-config = "0.3.30"
 default = ["klu", "amd", "colamd", "btf", "static_libraries", "build_vendor"]
 static_libraries = []
 build_vendor = []
+openmp = []
 mongoose = []
 amd = []
 btf = []
