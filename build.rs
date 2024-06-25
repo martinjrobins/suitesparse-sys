@@ -127,11 +127,6 @@ fn build_vendor() -> Result<Library, String> {
         .define("SUITESPARSE_DEMOS", "OFF")
         .define("SUITESPARSE_CONFIG_USE_OPENMP", feature!("openmp"));
 
-    // brew installs lapack and openblas in /usr/local/opt
-    if cfg!(target_os = "macos") {
-        config.define("CMAKE_PREFIX_PATH", "/usr/local/opt/lapack;/usr/local/opt/openblas");
-    }
-
     let dst = config.build();
     let dst_disp = dst.display();
     let lib_loc = Some(format!("{}/lib", dst_disp));
