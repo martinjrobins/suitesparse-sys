@@ -32,7 +32,7 @@ jobs:
             - stable
           os:
             - ubuntu-latest
-            - macos-latest
+            - macos-14
             - windows-latest
           include:
             - toolchain: beta
