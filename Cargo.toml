@@ -4,3 +4,30 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+
+[build-dependencies]
+bindgen = "0.69.4"
+cmake = "0.1.50"
+pkg-config = "0.3.30"
+
+[features]
+default = ["klu", "static_libraries", "build_vendor"]
+static_libraries = []
+build_vendor = []
+mongoose = []
+amd = []
+btf = []
+camd = []
+ccolamd = []
+colamd = []
+cholmod = []
+cxsparse = []
+ldl = []
+klu = []
+umfpack = []
+paru = []
+rbio = []
+spqr = []
+spex = []
+graphblas = []
+lagraph = []
