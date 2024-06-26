@@ -10,7 +10,9 @@ This crate provides bindings to the SuiteSparse library. By default it expects y
 E.g. on Ubuntu you might have:
 
 ```bash
-SUITESPARSE_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu SUITESPARSE_INCLUDE_DIR=/usr/include/suitesparse cargo test
+export set SUITESPARSE_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu 
+export set SUITESPARSE_INCLUDE_DIR=/usr/include/suitesparse 
+cargo test
 ```
 
 If you wish to build SuiteSparse from source, you can enable the `build_vendor` feature, which will build the SuiteSparse library from the `vendor` submodule in this repository (this is currently version v7.7.0 of SuiteSparse). If you wish to use the `build_vendor` feature, you will need to ensure you have all the required dependencies installed on your system corresponding to the libraries you wish to build (see list below).
