@@ -33,12 +33,12 @@ jobs:
           os:
             - ubuntu-latest
             - macos-latest
-            # - windows-latest
           include:
             - toolchain: beta
               os: ubuntu-latest
             - toolchain: nightly
               os: ubuntu-latest
+          vendor: [true, false]
 
     steps:
     - uses: actions/checkout@v4
@@ -50,29 +50,35 @@ jobs:
           ${{ env.CARGO_HOME }}
           target
         key: unit-test-${{ runner.os }}-${{ matrix.toolchain}}
-    - name: Install NuGet (windows)
-      if: matrix.os == 'windows-latest'
-      uses: nuget/setup-nuget@v2
-      with:
-        nuget-version: '5.x'
     - name: Install BLAS (ubuntu)
-      if: matrix.os == 'ubuntu-latest'
+      if: matrix.os == 'ubuntu-latest' && matrix.vendor == false
       run: sudo apt-get install libblas-dev liblapack-dev libopenblas-dev
     - name: Install BLAS (windows)
       if: matrix.os == 'windows-latest'
       run: |
         nuget install openblas -ExcludeVersion 
         mv OpenBLAS/lib .
+    - name: Install Homebrew (macos)
+      if: matrix.os == 'macos-latest' && matrix.vendor == true
+      uses: Homebrew/actions/setup-homebrew@master
+    - name: Install suitesparse (macos)
+      if: matrix.os == 'macos-latest' && matrix.vendor == true
+      run: brew install suite-sparse
+    - name: Install suitesparse (ubuntu)
+      if: matrix.os == 'ubuntu-latest' && matrix.vendor == true
+      run: sudo apt-get install libsuitesparse-dev
     - name: Set up Rust
       run: rustup default ${{ matrix.toolchain }} && rustup update ${{ matrix.toolchain }} --no-self-update && rustup component add clippy
     - name: Rust version
       run: rustc -Vv
-    #- name: Remote debug (windows)
-    #  if: matrix.os == 'windows-latest'
-    #  uses: mxschmitt/action-tmate@v3
-    - name: Run tests - default features
-      run: cargo test --verbose 
-    - name: Clippy - default features
+    - name: Run tests (build_vendor)
+      if : matrix.vendor == true
+      run: cargo test --features build_vendor --verbose 
+    - name : Run tests (no build_vendor)
+      if : matrix.vendor == false
+      run: cargo test --verbose
+    - name: Clippy
+      if : matrix.vendor == true
       run: cargo clippy --verbose
-    - name: Docs - default features
+    - name: Docs
       run: cargo rustdoc
