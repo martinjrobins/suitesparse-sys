@@ -6,7 +6,17 @@
 
 # suitesparse-sys
 
-This crate provides bindings to the SuiteSparse library. The possible features are:
+This crate provides bindings to the SuiteSparse library. By default it expects you to have SuiteSparse installed on your system, and to have the `SUITESPARSE_LIBRARY_DIR` and `SUITESPARSE_INCLUDE_DIR` environment variables set to the appropriate paths.
+E.g. on Ubuntu you might have:
+
+```bash
+SUITESPARSE_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu SUITESPARSE_INCLUDE_DIR=/usr/include/suitesparse cargo test
+```
+
+If you wish to build SuiteSparse from source, you can enable the `build_vendor` feature, which will build the SuiteSparse library from the `vendor` submodule in this repository (this is currently version v7.7.0 of SuiteSparse). If you wish to use the `build_vendor` feature, you will need to ensure you have all the required dependencies installed on your system corresponding to the libraries you wish to build (see list below).
+
+
+The possible features are:
 
 - `build_vendor`: Build the SuiteSparse library from source (currently version v7.7.0)
 - `build_static_libraries`: Build the SuiteSparse library as static libraries
@@ -32,9 +42,6 @@ Each library in the SuiteSparse library is a separate feature. The features are:
 - `graphblas`: Bindings to the GraphBLAS library.
 - `lagraph`: Bindings to the LA-Graph library.
 
-The default feature list builds the SuiteSparse library from source and includes the KLU solver and its dependencies. The default feature list is:
+The default feature list is:
 
-- [`klu`, `amd`, `colamd`, `btf`, `static_libraries`, `build_vendor`]
-
-
-If you wish to use a pre-installed version of SuiteSparse, you can disable the `build_vendor` feature set the `SUITESPARSE_LIBRARY_DIR` and `SUITESPARSE_INCLUDE_DIR` environment variables to the appropriate paths.
+- [`klu`, `amd`, `colamd`, `btf`]

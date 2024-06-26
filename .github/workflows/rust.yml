@@ -53,19 +53,14 @@ jobs:
     - name: Install BLAS (ubuntu)
       if: matrix.os == 'ubuntu-latest' && matrix.vendor == true
       run: sudo apt-get install libblas-dev liblapack-dev libopenblas-dev
-    - name: Install BLAS (windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        nuget install openblas -ExcludeVersion 
-        mv OpenBLAS/lib .
     - name: Install Homebrew (macos)
-      if: matrix.os == 'macos-latest' && matrix.vendor == true
+      if: matrix.os == 'macos-latest' && matrix.vendor == false
       uses: Homebrew/actions/setup-homebrew@master
     - name: Install suitesparse (macos)
-      if: matrix.os == 'macos-latest' && matrix.vendor == true
+      if: matrix.os == 'macos-latest' && matrix.vendor == false
       run: brew install suite-sparse
     - name: Install suitesparse (ubuntu)
-      if: matrix.os == 'ubuntu-latest' && matrix.vendor == true
+      if: matrix.os == 'ubuntu-latest' && matrix.vendor == false
       run: sudo apt-get install libsuitesparse-dev
     - name: Set up Rust
       run: rustup default ${{ matrix.toolchain }} && rustup update ${{ matrix.toolchain }} --no-self-update && rustup component add clippy
