@@ -49,9 +49,9 @@ jobs:
         path: |
           ${{ env.CARGO_HOME }}
           target
-        key: unit-test-${{ runner.os }}-${{ matrix.toolchain}}
+        key: unit-test-${{ runner.os }}-${{ matrix.toolchain}}-${{ matrix.vendor }}
     - name: Install BLAS (ubuntu)
-      if: matrix.os == 'ubuntu-latest' && matrix.vendor == false
+      if: matrix.os == 'ubuntu-latest' && matrix.vendor == true
       run: sudo apt-get install libblas-dev liblapack-dev libopenblas-dev
     - name: Install BLAS (windows)
       if: matrix.os == 'windows-latest'

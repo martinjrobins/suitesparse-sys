@@ -167,11 +167,8 @@ fn main() -> Result<(), String> {
     // if we can't find suitesparse or the build_vendor feature is enabled, we build the vendor suitesparse library
     if cfg!(feature = "build_vendor") {
         suitesparse = build_vendor()?;
-    } else if !suitesparse.is_some() {
-        println!("cargo:warning=SUITEPARSE_INCLUDE_DIR and SUITESPARSE_LIBRARY_DIR are not set. Building vendor suitesparse library.");
-        suitesparse = build_vendor()?;
     } else {
-        assert!(suitesparse.inc.is_some(), "Cannot find suitesparse include and library directories and build_vendor feature is not enabled.");
+        assert!(suitesparse.is_some(), "SUITEPARSE_INCLUDE_DIR and SUITESPARSE_LIBRARY_DIR are not set. Please set them or enable the build_vendor feature.");
     }
 
     // generate bindings to found or build suitesparse
