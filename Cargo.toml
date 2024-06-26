@@ -10,7 +10,15 @@ links = "suitesparse"
 exclude = [
     "vendor/LAGraph/data", "vendor/LAGraph/papers",
     "vendor/MATLAB_Tools",
-    "vendor/GraphBLAS/logo",
+    "vendor/GraphBLAS/logo", "vendor/GraphBLAS/Doc", "vendor/GraphBLAS/Demo", "vendor/GraphBLAS/Test",
+    "vendor/CXSparse/Demo", "vendor/CXSparse/Doc", "vendor/CXSparse/Matrix", "vendor/CXSparse/Matlab",
+    "vendor/Mongoose/MATLAB", "vendor/Mongoose/Matrix",
+    "vendor/CHOLMOD/SuiteSparse_metis/graphs",
+    "vendor/SPQR/Doc", "vendor/SPQR/MATLAB", "vendor/SPQR/Matrix",
+    "vendor/UMFPACK/Doc", "vendor/UMFPACK/Demo", 
+    "vendor/ParU/Matrix",
+    "vendor/ssget/files",
+    "vendor/CSparse/Matrix", "vendor/CSparse/MATLAB",
 ]
 
 [dependencies]
