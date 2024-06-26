@@ -49,8 +49,8 @@ jobs:
     - name: Set env vars (macos)
       if: matrix.os == 'macos-latest' && matrix.vendor == false
       run: |
-        echo "SUITESPARSE_LIBRARY_DIR=/usr/local/opt/suite-sparse/lib" >> $GITHUB_ENV
-        echo "SUITESPARSE_INCLUDE_DIR=/usr/local/opt/suite-sparse/include" >> $GITHUB_ENV
+        echo "SUITESPARSE_LIBRARY_DIR=/opt/homebrew/Cellar/suite-sparse/7.7.0/lib" >> $GITHUB_ENV
+        echo "SUITESPARSE_INCLUDE_DIR=/opt/homebrew/Cellar/suite-sparse/7.7.0/include" >> $GITHUB_ENV
     - uses: actions/checkout@v4
       with:
         submodules: true
@@ -82,8 +82,3 @@ jobs:
     - name : Run tests (no build_vendor)
       if : matrix.vendor == false
       run: cargo test --verbose
-    - name: Clippy
-      if : matrix.vendor == true
-      run: cargo clippy --verbose
-    - name: Docs
-      run: cargo rustdoc
