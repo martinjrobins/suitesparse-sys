@@ -24,7 +24,7 @@ jobs:
       - run: cargo fmt --all -- --check
 
   unit-tests:
-    name: Tests - ${{ matrix.os }} - ${{ matrix.toolchain }}
+    name: Tests - ${{ matrix.os }} - ${{ matrix.toolchain }} - ${{ matrix.vendor }}
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
@@ -41,6 +41,16 @@ jobs:
           vendor: [true, false]
 
     steps:
+    - name: Set env vars (ubuntu)
+      if: matrix.os == 'ubuntu-latest' && matrix.vendor == false
+      run: |
+        echo "SUITESPARSE_LIBRARY_DIR=/usr/lib/x86_64-linux-gnu" >> $GITHUB_ENV
+        echo "SUITESPARSE_INCLUDE_DIR=/usr/include/suitesparse" >> $GITHUB_ENV
+    - name: Set env vars (macos)
+      if: matrix.os == 'macos-latest' && matrix.vendor == false
+      run: |
+        echo "SUITESPARSE_LIBRARY_DIR=/usr/local/opt/suite-sparse/lib" >> $GITHUB_ENV
+        echo "SUITESPARSE_INCLUDE_DIR=/usr/local/opt/suite-sparse/include" >> $GITHUB_ENV
     - uses: actions/checkout@v4
       with:
         submodules: true
