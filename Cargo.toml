@@ -7,6 +7,11 @@ license = "MIT"
 authors = ["Martin Robinson <martinjrobins@gmail.com>"]
 repository = "https://github.com/martinjrobins/suitesparse-sys"
 links = "suitesparse"
+exclude = [
+    "vendor/LAGraph/data", "vendor/LAGraph/papers",
+    "vendor/MATLAB_Tools,
+    "vendor/GraphBLAS/logo",
+]
 
 [dependencies]
 
@@ -37,3 +42,7 @@ spqr = []
 spex = []
 graphblas = []
 lagraph = []
+
+[package.metadata.docs.rs]
+
+features = ["build_vendor", "klu", "amd", "colamd", "btf"]
