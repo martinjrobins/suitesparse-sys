@@ -9,7 +9,7 @@ repository = "https://github.com/martinjrobins/suitesparse-sys"
 links = "suitesparse"
 exclude = [
     "vendor/LAGraph/data", "vendor/LAGraph/papers",
-    "vendor/MATLAB_Tools,
+    "vendor/MATLAB_Tools",
     "vendor/GraphBLAS/logo",
 ]
 
