@@ -125,15 +125,8 @@ mod tests {
         let mut Common = klu_common::default();
         unsafe { klu_defaults(&mut Common) };
         let mut Symbolic = unsafe { klu_analyze(n, Ap.as_ptr(), Ai.as_ptr(), &mut Common) };
-        let mut Numeric = unsafe {
-            klu_factor(
-                Ap.as_ptr(),
-                Ai.as_ptr(),
-                Ax.as_ptr(),
-                Symbolic,
-                &mut Common,
-            )
-        };
+        let mut Numeric =
+            unsafe { klu_factor(Ap.as_ptr(), Ai.as_ptr(), Ax.as_ptr(), Symbolic, &mut Common) };
         unsafe { klu_solve(Symbolic, Numeric, n, 1, b.as_mut_ptr(), &mut Common) };
         unsafe { klu_free_symbolic(&mut Symbolic, &mut Common) };
         unsafe { klu_free_numeric(&mut Numeric, &mut Common) };
