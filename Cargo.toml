@@ -11,7 +11,7 @@ exclude = [
     "vendor/LAGraph/data", "vendor/LAGraph/papers", "vendor/LAGraph/src/benchmark", "vendor/LAGraph/src/test",
     "vendor/MATLAB_Tools",
     "vendor/.*",
-    "SPEX/ExampleMats",
+    "vendor/SPEX/ExampleMats",
     "vendor/GraphBLAS/logo", "vendor/GraphBLAS/Doc", "vendor/GraphBLAS/Demo", "vendor/GraphBLAS/Test", 
     "vendor/GraphBLAS/GraphBLAS/demo", "vendor/GraphBLAS/GraphBLAS/test", "vendor/GraphBLAS/GraphBLAS/@GrB",
     "vendor/CXSparse/Demo", "vendor/CXSparse/Doc", "vendor/CXSparse/Matrix", "vendor/CXSparse/Matlab",
