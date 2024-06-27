@@ -149,6 +149,8 @@ fn generate_bindings(suitesparse: &Library) -> Result<(), String> {
         .clang_arg(format!("-I{}", suitesparse.inc.as_ref().unwrap()))
         .clang_args(lib_args)
         .parse_callbacks(Box::new(IgnoreMacros::new()))
+        .blocklist_function("klu_(l_)?analyze")
+        .blocklist_function("klu_(l_)?factor")
         .generate()
         .map_err(|e| e.to_string())?;
 

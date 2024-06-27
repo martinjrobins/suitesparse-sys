@@ -71,6 +71,45 @@ impl Default for klu_l_common {
     }
 }
 
+#[cfg(feature = "klu")]
+use crate::{
+    klu_common as klu_common_, klu_l_common as klu_l_common_, klu_l_numeric as klu_l_numeric_,
+    klu_l_symbolic as klu_l_symbolic_, klu_numeric as klu_numeric_, klu_symbolic as klu_symbolic_,
+};
+
+#[cfg(feature = "klu")]
+extern "C" {
+    pub fn klu_analyze(
+        n: i32,
+        Ap: *const i32,
+        Ai: *const i32,
+        Common: *mut klu_common_,
+    ) -> *mut klu_symbolic_;
+
+    pub fn klu_factor(
+        Ap: *const i32,
+        Ai: *const i32,
+        Ax: *const f64,
+        Symbolic: *mut klu_symbolic_,
+        Common: *mut klu_common_,
+    ) -> *mut klu_numeric_;
+
+    pub fn klu_l_analyze(
+        n: i64,
+        Ap: *const i64,
+        Ai: *const i64,
+        Common: *mut klu_l_common_,
+    ) -> *mut klu_l_symbolic_;
+
+    pub fn klu_l_factor(
+        Ap: *const i64,
+        Ai: *const i64,
+        Ax: *const f64,
+        Symbolic: *mut klu_l_symbolic_,
+        Common: *mut klu_l_common_,
+    ) -> *mut klu_l_numeric_;
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -78,23 +117,16 @@ mod tests {
     #[test]
     fn klu_simple() {
         let n = 5i32;
-        let mut Ap = vec![0, 2, 5, 9, 10, 12];
-        let mut Ai = vec![0, 1, 0, 2, 4, 1, 2, 3, 4, 2, 1, 4];
-        let mut Ax = vec![2., 3., 3., -1., 4., 4., -3., 1., 2., 2., 6., 1.];
+        let Ap = vec![0, 2, 5, 9, 10, 12];
+        let Ai = vec![0, 1, 0, 2, 4, 1, 2, 3, 4, 2, 1, 4];
+        let Ax = vec![2., 3., 3., -1., 4., 4., -3., 1., 2., 2., 6., 1.];
         let mut b = vec![8., 45., -3., 3., 19.];
 
         let mut Common = klu_common::default();
         unsafe { klu_defaults(&mut Common) };
-        let mut Symbolic = unsafe { klu_analyze(n, Ap.as_mut_ptr(), Ai.as_mut_ptr(), &mut Common) };
-        let mut Numeric = unsafe {
-            klu_factor(
-                Ap.as_mut_ptr(),
-                Ai.as_mut_ptr(),
-                Ax.as_mut_ptr(),
-                Symbolic,
-                &mut Common,
-            )
-        };
+        let mut Symbolic = unsafe { klu_analyze(n, Ap.as_ptr(), Ai.as_ptr(), &mut Common) };
+        let mut Numeric =
+            unsafe { klu_factor(Ap.as_ptr(), Ai.as_ptr(), Ax.as_ptr(), Symbolic, &mut Common) };
         unsafe { klu_solve(Symbolic, Numeric, n, 1, b.as_mut_ptr(), &mut Common) };
         unsafe { klu_free_symbolic(&mut Symbolic, &mut Common) };
         unsafe { klu_free_numeric(&mut Numeric, &mut Common) };
