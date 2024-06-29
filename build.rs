@@ -82,11 +82,8 @@ impl Library {
         Self {
             inc: env::var("SUITESPARSE_INCLUDE_DIR").ok(),
             lib: env::var("SUITESPARSE_LIBRARY_DIR").ok(),
-            is_static: true,
+            is_static: cfg!(feature = "static_libraries"),
         }
-    }
-    fn is_some(&self) -> bool {
-        self.inc.is_some() && self.lib.is_some()
     }
 }
 
@@ -144,9 +141,12 @@ fn generate_bindings(suitesparse: &Library) -> Result<(), String> {
         lib_args.push(format!("-DUSE_{}", lib.to_uppercase()));
     }
 
-    let builder = bindgen::Builder::default().header("wrapper.h");
+    let mut builder = bindgen::Builder::default().header("wrapper.h");
+    if let Some(dir) = suitesparse.inc.as_ref() {
+        builder = builder.clang_arg(format!("-I{}", dir));
+    }
+
     let bindings = builder
-        .clang_arg(format!("-I{}", suitesparse.inc.as_ref().unwrap()))
         .clang_args(lib_args)
         .parse_callbacks(Box::new(IgnoreMacros::new()))
         .blocklist_function("klu_(l_)?analyze")
@@ -169,18 +169,15 @@ fn main() -> Result<(), String> {
     // if we can't find suitesparse or the build_vendor feature is enabled, we build the vendor suitesparse library
     if cfg!(feature = "build_vendor") {
         suitesparse = build_vendor()?;
-    } else {
-        assert!(suitesparse.is_some(), "SUITEPARSE_INCLUDE_DIR and SUITESPARSE_LIBRARY_DIR are not set. Please set them or enable the build_vendor feature.");
     }
 
     // generate bindings to found or build suitesparse
     generate_bindings(&suitesparse)?;
 
     // let Cargo know about the library files
-    println!(
-        "cargo:rustc-link-search=native={}",
-        suitesparse.lib.as_ref().unwrap()
-    );
+    if let Some(dir) = suitesparse.lib.as_ref() {
+        println!("cargo:rustc-link-search=native={}", dir);
+    }
 
     let mut lib_names = vec!["suitesparseconfig"];
     for &lib in ENABLED_LIBRARIES {
