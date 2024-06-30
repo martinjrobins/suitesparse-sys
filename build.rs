@@ -123,13 +123,11 @@ impl Library {
                 if !file_name.starts_with(|c: char| c.is_ascii_digit()) {
                     continue;
                 }
-                if PathBuf::from(format!(
-                    "{}/include/suitesparse/klu.h",
-                    path.to_str().unwrap()
-                ))
-                .exists()
-                {
-                    return Some(path.to_str().unwrap().to_string());
+                for subpath in &["include", "include/suitesparse"] {
+                    let path = path.join(subpath);
+                    if PathBuf::from(format!("{}/klu.h", path.to_str().unwrap())).exists() {
+                        return Some(path.to_str().unwrap().to_string());
+                    }
                 }
             }
         }
@@ -178,14 +176,17 @@ impl Library {
                 if !file_name.starts_with(|c: char| c.is_ascii_digit()) {
                     continue;
                 }
-                if PathBuf::from(format!(
-                    "{}/lib/libsuitesparseconfig.{}",
-                    path.to_str().unwrap(),
-                    check_ext
-                ))
-                .exists()
-                {
-                    return Some(path.to_str().unwrap().to_string());
+                for subpath in &["lib", "lib64"] {
+                    let path = path.join(subpath);
+                    if PathBuf::from(format!(
+                        "{}/libsuitesparseconfig.{}",
+                        path.to_str().unwrap(),
+                        check_ext
+                    ))
+                    .exists()
+                    {
+                        return Some(path.to_str().unwrap().to_string());
+                    }
                 }
             }
         }

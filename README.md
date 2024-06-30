@@ -6,7 +6,8 @@
 
 # suitesparse-sys
 
-This crate provides bindings to the SuiteSparse library. By default it expects you to have SuiteSparse installed on your system, and to have the `SUITESPARSE_LIBRARY_DIR` and `SUITESPARSE_INCLUDE_DIR` environment variables set to the appropriate paths.
+This crate provides bindings to the SuiteSparse library. By default it expects you to have SuiteSparse installed on your system.
+It will try to find these, but if it fails, then you can manually set the `SUITESPARSE_LIBRARY_DIR` and `SUITESPARSE_INCLUDE_DIR` environment variables set to the appropriate paths.
 E.g. on Ubuntu you might have:
 
 ```bash
