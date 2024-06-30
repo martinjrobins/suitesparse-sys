@@ -107,7 +107,7 @@ impl Library {
             // check if the dir exists
             if !PathBuf::from(path).exists() {
                 continue;
-            } 
+            }
             // loop through all directories starting with a version number
             for entry in std::fs::read_dir(path).unwrap() {
                 let entry = entry.unwrap();
