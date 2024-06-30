@@ -41,11 +41,6 @@ jobs:
           vendor: [true, false]
 
     steps:
-    - name: Set env vars (macos)
-      if: matrix.os == 'macos-latest' && matrix.vendor == false
-      run: |
-        echo "SUITESPARSE_LIBRARY_DIR=/opt/homebrew/Cellar/suite-sparse/7.7.0/lib" >> $GITHUB_ENV
-        echo "SUITESPARSE_INCLUDE_DIR=/opt/homebrew/Cellar/suite-sparse/7.7.0/include" >> $GITHUB_ENV
     - uses: actions/checkout@v4
       with:
         submodules: true
