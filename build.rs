@@ -234,7 +234,7 @@ fn build_vendor() -> Result<Library, String> {
     let dst = config.build();
     let dst_disp = dst.display();
     let lib_loc = Some(format!("{}/lib", dst_disp));
-    let inc_dir = Some(format!("{}/include", dst_disp));
+    let inc_dir = Some(format!("{}/include/suitesparse", dst_disp));
     Ok(Library {
         inc: inc_dir,
         lib: lib_loc,
