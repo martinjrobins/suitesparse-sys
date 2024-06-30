@@ -80,10 +80,117 @@ struct Library {
 impl Library {
     fn new() -> Self {
         Self {
-            inc: env::var("SUITESPARSE_INCLUDE_DIR").ok(),
-            lib: env::var("SUITESPARSE_LIBRARY_DIR").ok(),
+            inc: Self::find_include_dir(),
+            lib: Self::find_lib_dir(),
             is_static: cfg!(feature = "static_libraries"),
         }
+    }
+    fn find_include_dir() -> Option<String> {
+        let include_dir = env::var("SUITESPARSE_INCLUDE_DIR").ok();
+        if include_dir.is_some() {
+            return include_dir;
+        }
+        // debian/ubuntu
+        for path in &[
+            "/usr/include/suitesparse",
+            "/usr/local/include/suitesparse",
+            "/usr/include",
+            "/usr/local/include",
+        ] {
+            if PathBuf::from(format!("{}/klu.h", path)).exists() {
+                return Some(path.to_string());
+            }
+        }
+
+        // homebrew
+        for path in &["/opt/homebrew/Cellar/suite-sparse"] {
+            // check if the dir exists
+            if !PathBuf::from(path).exists() {
+                continue;
+            }
+            // loop through all directories starting with a version number
+            for entry in std::fs::read_dir(path).unwrap() {
+                let entry = entry.unwrap();
+                let path = entry.path();
+                if !path.is_dir() {
+                    continue;
+                }
+                let file_name = path.file_name();
+                if file_name.is_none() {
+                    continue;
+                }
+                let file_name = file_name.unwrap().to_str().unwrap();
+                if !file_name.starts_with(|c: char| c.is_ascii_digit()) {
+                    continue;
+                }
+                for subpath in &["include", "include/suitesparse"] {
+                    let path = path.join(subpath);
+                    if PathBuf::from(format!("{}/klu.h", path.to_str().unwrap())).exists() {
+                        return Some(path.to_str().unwrap().to_string());
+                    }
+                }
+            }
+        }
+        None
+    }
+    fn find_lib_dir() -> Option<String> {
+        let include_dir = env::var("SUITESPARSE_LIBRARY_DIR").ok();
+        if include_dir.is_some() {
+            return include_dir;
+        }
+        let check_ext = if cfg!(feature = "static_libraries") {
+            "a"
+        } else if cfg!(target_os = "windows") {
+            "dll"
+        } else if cfg!(target_os = "macos") {
+            "dylib"
+        } else {
+            "so"
+        };
+
+        // debian/ubuntu
+        for path in &["/usr/lib", "/usr/local/lib", "/usr/lib/x86_64-linux-gnu"] {
+            if PathBuf::from(format!("{}/libsuitesparseconfig.{}", path, check_ext)).exists() {
+                return Some(path.to_string());
+            }
+        }
+
+        // homebrew
+        for path in &["/opt/homebrew/Cellar/suite-sparse"] {
+            // check if the dir exists
+            if !PathBuf::from(path).exists() {
+                continue;
+            }
+            // loop through all directories starting with a version number
+            for entry in std::fs::read_dir(path).unwrap() {
+                let entry = entry.unwrap();
+                let path = entry.path();
+                if !path.is_dir() {
+                    continue;
+                }
+                let file_name = path.file_name();
+                if file_name.is_none() {
+                    continue;
+                }
+                let file_name = file_name.unwrap().to_str().unwrap();
+                if !file_name.starts_with(|c: char| c.is_ascii_digit()) {
+                    continue;
+                }
+                for subpath in &["lib", "lib64"] {
+                    let path = path.join(subpath);
+                    if PathBuf::from(format!(
+                        "{}/libsuitesparseconfig.{}",
+                        path.to_str().unwrap(),
+                        check_ext
+                    ))
+                    .exists()
+                    {
+                        return Some(path.to_str().unwrap().to_string());
+                    }
+                }
+            }
+        }
+        None
     }
 }
 
@@ -127,7 +234,7 @@ fn build_vendor() -> Result<Library, String> {
     let dst = config.build();
     let dst_disp = dst.display();
     let lib_loc = Some(format!("{}/lib", dst_disp));
-    let inc_dir = Some(format!("{}/include", dst_disp));
+    let inc_dir = Some(format!("{}/include/suitesparse", dst_disp));
     Ok(Library {
         inc: inc_dir,
         lib: lib_loc,
@@ -165,6 +272,12 @@ fn generate_bindings(suitesparse: &Library) -> Result<(), String> {
 fn main() -> Result<(), String> {
     // try to find suitesparse
     let mut suitesparse = Library::new();
+    if let Some(dir) = suitesparse.inc.as_ref() {
+        println!("cargo:suitesparse-include={}", dir);
+    }
+    if let Some(dir) = suitesparse.lib.as_ref() {
+        println!("cargo:suitesparse-lib={}", dir);
+    }
 
     // if we can't find suitesparse or the build_vendor feature is enabled, we build the vendor suitesparse library
     if cfg!(feature = "build_vendor") {

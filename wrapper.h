@@ -1,69 +1,69 @@
-#include <suitesparse/SuiteSparse_config.h>
+#include <SuiteSparse_config.h>
 
 #ifdef USE_MONGOOSE
-#include <suitesparse/mongoose.h>
+#include <mongoose.h>
 #endif
 
 #ifdef USE_AMD
-#include <suitesparse/amd.h>
+#include <amd.h>
 #endif
 
 #ifdef USE_BTF
-#include <suitesparse/btf.h>
+#include <btf.h>
 #endif
 
 #ifdef USE_CAMD
-#include <suitesparse/camd.h>
+#include <camd.h>
 #endif  
 
 #ifdef USE_CCOLAMD
-#include <suitesparse/ccolamd.h>
+#include <ccolamd.h>
 #endif
 
 #ifdef USE_COLAMD
-#include <suitesparse/colamd.h>
+#include <colamd.h>
 #endif
 
 #ifdef USE_CHOLMOD
-#include <suitesparse/cholmod.h>
+#include <cholmod.h>
 #endif
 
 #ifdef USE_CXSPARSE
-#include <suitesparse/cs.h>
+#include <cs.h>
 #endif
 
 #ifdef USE_LDL
-#include <suitesparse/ldl.h>
+#include <ldl.h>
 #endif
 
 #ifdef USE_KLU
-#include <suitesparse/klu.h>
+#include <klu.h>
 #endif
 
 #ifdef USE_UMFPACK
-#include <suitesparse/umfpack.h>
+#include <umfpack.h>
 #endif
 
 #ifdef USE_PARU
-#include <suitesparse/paru.h>
+#include <paru.h>
 #endif
 
 #ifdef USE_RBIO
-#include <suitesparse/rbio.h>
+#include <rbio.h>
 #endif
 
 #ifdef USE_SPQR
-#include <suitesparse/spqr.h>
+#include <spqr.h>
 #endif
 
 #ifdef USE_SPEX
-#include <suitesparse/spex.h>
+#include <spex.h>
 #endif
 
 #ifdef USE_GRAPHBLAS
-#include <suitesparse/GraphBLAS.h>
+#include <GraphBLAS.h>
 #endif
 
 #ifdef USE_LAGRAPH
-#include <suitesparse/LAGraph.h>
+#include <LAGraph.h>
 #endif
