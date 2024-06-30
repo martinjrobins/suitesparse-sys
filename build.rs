@@ -104,6 +104,10 @@ impl Library {
 
         // homebrew
         for path in &["/opt/homebrew/Cellar/suite-sparse"] {
+            // check if the dir exists
+            if !PathBuf::from(path).exists() {
+                continue;
+            } 
             // loop through all directories starting with a version number
             for entry in std::fs::read_dir(path).unwrap() {
                 let entry = entry.unwrap();
@@ -150,6 +154,10 @@ impl Library {
 
         // homebrew
         for path in &["/opt/homebrew/Cellar/suite-sparse"] {
+            // check if the dir exists
+            if !PathBuf::from(path).exists() {
+                continue;
+            }
             // loop through all directories starting with a version number
             for entry in std::fs::read_dir(path).unwrap() {
                 let entry = entry.unwrap();
