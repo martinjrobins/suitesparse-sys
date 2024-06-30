@@ -123,7 +123,12 @@ impl Library {
                 if !file_name.starts_with(|c: char| c.is_ascii_digit()) {
                     continue;
                 }
-                if PathBuf::from(format!("{}/include/klu.h", path.to_str().unwrap())).exists() {
+                if PathBuf::from(format!(
+                    "{}/include/suitesparse/klu.h",
+                    path.to_str().unwrap()
+                ))
+                .exists()
+                {
                     return Some(path.to_str().unwrap().to_string());
                 }
             }
@@ -174,7 +179,7 @@ impl Library {
                     continue;
                 }
                 if PathBuf::from(format!(
-                    "{}/libsuitesparseconfig.{}",
+                    "{}/lib/libsuitesparseconfig.{}",
                     path.to_str().unwrap(),
                     check_ext
                 ))
