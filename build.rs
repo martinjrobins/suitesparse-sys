@@ -257,7 +257,7 @@ fn generate_bindings(suitesparse: &Library) -> Result<(), String> {
         .clang_args(lib_args)
         .parse_callbacks(Box::new(IgnoreMacros::new()))
         .blocklist_function("klu_(l_)?analyze")
-        .blocklist_function("klu_(l_)?factor")
+        .blocklist_function("klu_(l_)?(zl_)?(z_)?factor")
         .generate()
         .map_err(|e| e.to_string())?;
 
