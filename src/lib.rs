@@ -93,7 +93,7 @@ extern "C" {
         Symbolic: *mut klu_symbolic_,
         Common: *mut klu_common_,
     ) -> *mut klu_numeric_;
-    
+
     pub fn klu_z_factor(
         Ap: *const i32,
         Ai: *const i32,
@@ -116,7 +116,7 @@ extern "C" {
         Symbolic: *mut klu_l_symbolic_,
         Common: *mut klu_l_common_,
     ) -> *mut klu_l_numeric_;
-    
+
     pub fn klu_zl_factor(
         Ap: *const i64,
         Ai: *const i64,
