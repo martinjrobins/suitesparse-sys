@@ -1,6 +1,6 @@
 <div align="center">
-<a href="https://github.com/martinjrobins/diffsol/actions/workflows/rust.yml">
-    <img src="https://github.com/martinjrobins/diffsol/actions/workflows/rust.yml/badge.svg" alt="CI build status badge">
+<a href="https://github.com/martinjrobins/suitesparse-sys/actions/workflows/rust.yml">
+    <img src="https://github.com/martinjrobins/suitesparse-sys/actions/workflows/rust.yml/badge.svg" alt="CI build status badge">
 </a>
 </div>
 
